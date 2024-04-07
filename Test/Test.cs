@@ -13,29 +13,45 @@ public class Test
     [Fact]
     public void SacarBolilla()
     {
-        var ex = Assert.Throws<ArgumentException>(() => bolillero.Jugar(0));
-        if ("Ganaste, felicidades shinji" == ex.Message)
-        {
-            Assert.Equal("Ganaste, felicidades shinji", ex.Message);
-        }
-        else
-        {
-            Assert.Equal("Perdiste, felicidades shinji", ex.Message);
-        }
+        bolillero.SacarBolilla(0);
+
+        Assert.Equal(9, bolillero.Bolillas.Count);
+        Assert.Single(bolillero.BolillasSacadas);
     }
     [Fact]
     public void ReIngresar()
     {
+        bolillero.SacarBolilla(0);
+        bolillero.ReIngresar();
 
+        Assert.Equal(10, bolillero.Bolillas.Count);
+        Assert.Empty(bolillero.BolillasSacadas);
     }
-    [Fact]
-    public void JugarGana()
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void JugarGana(int bolilla)
     {
-
+        var ex = Assert.Throws<ArgumentException>(() => bolillero.VictoriaAsegurada(bolilla));
+        Assert.Equal("Ganaste, felicidades shinji", ex.Message);
     }
+
+    [Theory]
+    [InlineData(4)]
+    [InlineData(2)]
+    [InlineData(1)]
+    public void JugarPierde(int bolilla)
+    {
+        var ex = Assert.Throws<ArgumentException>(() => bolillero.DerrotaAsegurada(bolilla));
+        Assert.Equal("Perdiste, felicidades shinji", ex.Message);
+    }
+
     [Fact]
     public void GanarNVeces()
     {
-        
+
     }
 }

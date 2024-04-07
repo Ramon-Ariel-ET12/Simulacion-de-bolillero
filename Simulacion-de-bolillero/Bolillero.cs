@@ -27,6 +27,53 @@ public class Bolillero
             Bolillas.Remove(bolilla);
             BolillasSacadas.Add(bolilla);
             throw new ArgumentException("Perdiste, felicidades shinji");
-        }	
+        }
     }
+
+    public void SacarBolilla(int bolilla)
+    {
+        if (Bolillas.Contains(bolilla))
+        {
+            Bolillas.Remove(bolilla);
+            BolillasSacadas.Add(bolilla);
+        }
+        else
+        {
+            throw new InvalidOperationException($"La bolilla numero '{bolilla}' no existe");
+        }
+    }
+    public void ReIngresar()
+    {
+        foreach (var item in BolillasSacadas)
+        {
+            Bolillas.Add(item);
+        }
+        BolillasSacadas.RemoveAll(x => true);
+        Bolillas.Sort();
+    }
+
+    public void VictoriaAsegurada(int bolilla)
+    {
+        int victoria = azar.Aleatoinator(this);
+        while(bolilla != victoria)
+        {
+            victoria = azar.Aleatoinator(this);
+        }
+        BolillasSacadas.Add(bolilla);
+        Bolillas.Remove(bolilla);
+        throw new ArgumentException("Ganaste, felicidades shinji");
+    }
+    
+    public void DerrotaAsegurada(int bolilla)
+    {
+        int derrota = azar.Aleatoinator(this);
+        while (bolilla == derrota)
+        {
+            derrota = azar.Aleatoinator(this);
+        }
+        BolillasSacadas.Add(bolilla);
+        Bolillas.Remove(bolilla);
+        throw new ArgumentException("Perdiste, felicidades shinji");
+    }
+
 }
