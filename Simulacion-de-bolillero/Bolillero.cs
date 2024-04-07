@@ -5,11 +5,11 @@ public class Bolillero
     public List<int> Bolillas { get; set; }
     public List<int> BolillasSacadas { get; set; }
     public IAzar azar { get; set; }
-    public Bolillero(int cantidad) => (Bolillas, BolillasSacadas, azar) = (CantidadBolillas(cantidad), new List<int>(), new Aleatorio());
+    public Bolillero(int cantidad) => (Bolillas, BolillasSacadas, azar) = (CantidadBolillas(cantidad), new(), new Aleatorio());
 
     private List<int> CantidadBolillas(int cantidad)
     {
-        List<int> ints = new List<int>();
+        List<int> ints = new();
         for (var i = 0; i < cantidad; i++) ints.Add(i);
         return ints;
     }
