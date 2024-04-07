@@ -2,15 +2,31 @@
 
 public class Bolillero
 {
-    public int Total { get; set; }
     public List<int> Bolillas { get; set; }
+    public List<int> BolillasSacadas { get; set; }
     public IAzar azar { get; set; }
-    public Bolillero() => (Total, Bolillas, azar) = (0, new List<int>(), new Aleatorio());
+    public Bolillero(int cantidad) => (Bolillas, BolillasSacadas, azar) = (CantidadBolillas(cantidad), new List<int>(), new Aleatorio());
 
-    public void CantidadBolillas(int cantidad)
+    private List<int> CantidadBolillas(int cantidad)
     {
-        for (var i = 0; i < cantidad; i++) Bolillas.Add(i);
-        Total = Bolillas.Count;
+        List<int> ints = new List<int>();
+        for (var i = 0; i < cantidad; i++) ints.Add(i);
+        return ints;
     }
-    public int SacarBolilla() => azar.Aleatorinator(this);
+    public void Jugar(int bolilla)
+    {
+        int random = azar.Aleatoinator(this);
+        if (bolilla == random)
+        {
+            Bolillas.Remove(bolilla);
+            BolillasSacadas.Add(bolilla);
+            throw new ArgumentException("Ganaste, felicidades shinji");
+        }
+        else
+        {
+            Bolillas.Remove(bolilla);
+            BolillasSacadas.Add(bolilla);
+            throw new ArgumentException("Perdiste, felicidades shinji");
+        }	
+    }
 }

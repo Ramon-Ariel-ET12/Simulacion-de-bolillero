@@ -2,25 +2,26 @@ namespace Test;
 using Simulacion_de_bolillero;
 public class Test
 {
+    public Bolillero bolillero { get; set; }
+    public Test() => bolillero = new Bolillero(10);
     [Fact]
     public void Test1()
     {
-        var bolillero = new Bolillero();
-        bolillero.CantidadBolillas(9);
-        Assert.Equal(9, bolillero.Total);
+        Assert.Equal(10, bolillero.Bolillas.Count);
     }
 
     [Fact]
     public void SacarBolilla()
     {
-        var bolillero = new Bolillero();
-        bolillero.CantidadBolillas(10);
-        int variable = bolillero.SacarBolilla();
-        
-
-#pragma warning disable xUnit2002 // Do not use null check on value type
-        Assert.NotNull(variable);
-#pragma warning restore xUnit2002 // Do not use null check on value type
+        var ex = Assert.Throws<ArgumentException>(() => bolillero.Jugar(0));
+        if ("Ganaste, felicidades shinji" == ex.Message)
+        {
+            Assert.Equal("Ganaste, felicidades shinji", ex.Message);
+        }
+        else
+        {
+            Assert.Equal("Perdiste, felicidades shinji", ex.Message);
+        }
     }
     [Fact]
     public void ReIngresar()
