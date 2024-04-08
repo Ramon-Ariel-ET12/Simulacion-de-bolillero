@@ -3,7 +3,7 @@ using Simulacion_de_bolillero;
 public class Test
 {
     public Bolillero bolillero { get; set; }
-    public Test() => bolillero = new Bolillero(10);
+    public Test() => bolillero = new Bolillero(10, new Primero());
     [Fact]
     public void Test1()
     {
@@ -13,45 +13,39 @@ public class Test
     [Fact]
     public void SacarBolilla()
     {
-        bolillero.SacarBolilla(0);
+        var bolilla = bolillero.SacarBolilla();
 
+        Assert.Equal(0, bolilla);
         Assert.Equal(9, bolillero.Bolillas.Count);
         Assert.Single(bolillero.BolillasSacadas);
     }
     [Fact]
     public void ReIngresar()
     {
-        bolillero.SacarBolilla(0);
+        bolillero.SacarBolilla();
         bolillero.ReIngresar();
 
         Assert.Equal(10, bolillero.Bolillas.Count);
         Assert.Empty(bolillero.BolillasSacadas);
     }
 
-    [Theory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    public void JugarGana(int bolilla)
+    [Fact]
+    public void JugarGana()
     {
-        var ex = Assert.Throws<ArgumentException>(() => bolillero.VictoriaAsegurada(bolilla));
-        Assert.Equal("Ganaste, felicidades shinji", ex.Message);
+        bool resultado = bolillero.Jugar([0, 1, 2, 3]);
+        Assert.True(resultado);
     }
 
-    [Theory]
-    [InlineData(4)]
-    [InlineData(2)]
-    [InlineData(1)]
-    public void JugarPierde(int bolilla)
+    [Fact]
+    public void JugarPierde()
     {
-        var ex = Assert.Throws<ArgumentException>(() => bolillero.DerrotaAsegurada(bolilla));
-        Assert.Equal("Perdiste, felicidades shinji", ex.Message);
+        bool perdiste = bolillero.Jugar([4, 2, 1]);
+        Assert.False(perdiste);
     }
 
     [Fact]
     public void GanarNVeces()
     {
-
+        Equals(2, bolillero.JugarNVeces(2, [0, 1, 2]));
     }
 }

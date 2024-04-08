@@ -4,76 +4,51 @@ public class Bolillero
 {
     public List<int> Bolillas { get; set; }
     public List<int> BolillasSacadas { get; set; }
-    public IAzar azar { get; set; }
-    public Bolillero(int cantidad) => (Bolillas, BolillasSacadas, azar) = (CantidadBolillas(cantidad), new(), new Aleatorio());
+    public IAzar Azar { get; set; }
+    public Bolillero(int cantidad) : this(cantidad, new Aleatorio()) { }
+    public Bolillero(int cantidad, IAzar azar)
+        => (Bolillas, BolillasSacadas, Azar) = (GenerarBolillas(cantidad), [], azar);
 
-    private List<int> CantidadBolillas(int cantidad)
+    private List<int> GenerarBolillas(int cantidad)
     {
-        List<int> ints = new();
-        for (var i = 0; i < cantidad; i++) ints.Add(i);
+        List<int> ints = [];
+        for (var i = 0; i < cantidad; ints.Add(i++)) ;
         return ints;
     }
-    public void Jugar(int bolilla)
+    public bool Jugar(List<int> jugada)
     {
-        int random = azar.Aleatoinator(this);
-        if (bolilla == random)
+        foreach (var bolilla in jugada)
         {
-            Bolillas.Remove(bolilla);
-            BolillasSacadas.Add(bolilla);
-            throw new ArgumentException("Ganaste, felicidades shinji");
+            int bolillaSeleccionada = SacarBolilla();
+            if (bolilla != bolillaSeleccionada)
+                return false;
         }
-        else
-        {
-            Bolillas.Remove(bolilla);
-            BolillasSacadas.Add(bolilla);
-            throw new ArgumentException("Perdiste, felicidades shinji");
-        }
+        return true;
     }
 
-    public void SacarBolilla(int bolilla)
+    public int JugarNVeces(int cantidad, List<int> jugada)
     {
-        if (Bolillas.Contains(bolilla))
+        int victorias = 0;
+        for (int i = 0; i < cantidad; i++)
         {
-            Bolillas.Remove(bolilla);
-            BolillasSacadas.Add(bolilla);
+            ReIngresar();
+            if (Jugar(jugada))
+                victorias++;
         }
-        else
-        {
-            throw new InvalidOperationException($"La bolilla numero '{bolilla}' no existe");
-        }
+        return victorias;
+    }
+
+    public int SacarBolilla()
+    {
+        var bolilla = Azar.Aleatoinator(this);
+        Bolillas.Remove(bolilla);
+        BolillasSacadas.Add(bolilla);
+        return bolilla;
     }
     public void ReIngresar()
     {
-        foreach (var item in BolillasSacadas)
-        {
-            Bolillas.Add(item);
-        }
-        BolillasSacadas.RemoveAll(x => true);
+        Bolillas.AddRange(BolillasSacadas);
+        BolillasSacadas.Clear();
         Bolillas.Sort();
     }
-
-    public void VictoriaAsegurada(int bolilla)
-    {
-        int victoria = azar.Aleatoinator(this);
-        while(bolilla != victoria)
-        {
-            victoria = azar.Aleatoinator(this);
-        }
-        BolillasSacadas.Add(bolilla);
-        Bolillas.Remove(bolilla);
-        throw new ArgumentException("Ganaste, felicidades shinji");
-    }
-    
-    public void DerrotaAsegurada(int bolilla)
-    {
-        int derrota = azar.Aleatoinator(this);
-        while (bolilla == derrota)
-        {
-            derrota = azar.Aleatoinator(this);
-        }
-        BolillasSacadas.Add(bolilla);
-        Bolillas.Remove(bolilla);
-        throw new ArgumentException("Perdiste, felicidades shinji");
-    }
-
 }
