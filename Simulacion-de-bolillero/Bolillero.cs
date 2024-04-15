@@ -26,10 +26,10 @@ public class Bolillero
         return true;
     }
 
-    public int JugarNVeces(int cantidad, List<int> jugada)
+    public long JugarNVeces(long cantidad, List<int> jugada)
     {
-        int victorias = 0;
-        for (int i = 0; i < cantidad; i++)
+        long victorias = 0;
+        for (long i = 0; i < cantidad; i++)
         {
             ReIngresar();
             if (Jugar(jugada))
