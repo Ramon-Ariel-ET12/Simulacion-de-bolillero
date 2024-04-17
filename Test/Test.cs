@@ -2,12 +2,15 @@ namespace Test;
 using Simulacion_de_bolillero;
 public class Test
 {
+    Simulacion simulacion { get; set; }
     public Bolillero bolillero { get; set; }
-    public Test() => bolillero = new Bolillero(10, new Primero());
+    public Test() => (simulacion, bolillero) = (new Simulacion(), new Bolillero(10, new Primero()));
+
     [Fact]
     public void Test1()
     {
-        Assert.Equal(10, bolillero.Bolillas.Count);
+        simulacion.SimularSinHilos(bolillero, [0, 1, 2, 3], 8);
+        simulacion.SimularConHilos(bolillero, [0, 1, 2, 3], 8, 4);
     }
 
     [Fact]

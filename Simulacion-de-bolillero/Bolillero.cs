@@ -1,10 +1,16 @@
 ﻿namespace Simulacion_de_bolillero;
 
-public class Bolillero
+public class Bolillero : IClonable
 {
     public List<int> Bolillas { get; set; }
     public List<int> BolillasSacadas { get; set; }
     public IAzar Azar { get; set; }
+    private Bolillero(Bolillero original)
+    {
+        Bolillas = new(original.Bolillas);
+        BolillasSacadas = new(original.BolillasSacadas);
+        Azar = original.Azar;
+    }
     public Bolillero(int cantidad) : this(cantidad, new Aleatorio()) { }
     public Bolillero(int cantidad, IAzar azar)
         => (Bolillas, BolillasSacadas, Azar) = (GenerarBolillas(cantidad), [], azar);
@@ -51,4 +57,7 @@ public class Bolillero
         BolillasSacadas.Clear();
         Bolillas.Sort();
     }
+
+    public Bolillero ClonarBolillero()
+        => new(this);
 }
