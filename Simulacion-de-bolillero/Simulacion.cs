@@ -19,15 +19,17 @@ public class Simulacion : IClonable
     public static long SimularConHilos(Bolillero bolillero, List<int> jugada, long cantidadSimulacion, long cantidadHilo)
     {
         Simulacion simulacion = new(bolillero);
+        Task<long>[] tareas = new Task<long>[cantidadHilo];
         long victorias = 0;
-        
-        for (long i = 0; i < cantidadHilo; i++)
+        Task.WaitAll(tareas);
+
+        for (int i = 0; i < cantidadHilo; i++)
         {
-            Task<long> tarea = Task.Run( () => bolillero.JugarNVeces(cantidadSimulacion/cantidadHilo, jugada) );
-            victorias =+ tarea.Result;
-            if (i == cantidadHilo-1){
-                tarea.Wait();
-            }
+            tareas[i] = Task.Run(() => bolillero.JugarNVeces(cantidadSimulacion / cantidadHilo, jugada));
+        }
+        foreach (var item in tareas)
+        {
+            victorias = +item.Result;
         }
         return victorias;
     }
