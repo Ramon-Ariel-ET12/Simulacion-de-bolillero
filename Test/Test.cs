@@ -2,53 +2,52 @@ namespace Test;
 using Simulacion_de_bolillero;
 public class Test
 {
-    Simulacion simulacion { get; set; }
-    public Bolillero bolillero { get; set; }
-    public Test() => (simulacion, bolillero) = (new Simulacion(), new Bolillero(10, new Primero()));
+    public Bolillero Bolillero { get; set; }
+    public Test() => Bolillero = new Bolillero(10, new Primero());
 
     [Fact]
     public void Test1()
     {
-        simulacion.SimularSinHilos(bolillero, [0, 1, 2, 3], 8);
-        simulacion.SimularConHilos(bolillero, [0, 1, 2, 3], 8, 4);
+        Simulacion.SimularSinHilos(Bolillero, [0, 1, 2, 3], 8);
+        Simulacion.SimularConHilos(Bolillero, [0, 1, 2, 3], 10, 4);
     }
 
     [Fact]
     public void SacarBolilla()
     {
-        var bolilla = bolillero.SacarBolilla();
+        var bolilla = Bolillero.SacarBolilla();
 
         Assert.Equal(0, bolilla);
-        Assert.Equal(9, bolillero.Bolillas.Count);
-        Assert.Single(bolillero.BolillasSacadas);
+        Assert.Equal(9, Bolillero.Bolillas.Count);
+        Assert.Single(Bolillero.BolillasSacadas);
     }
     [Fact]
     public void ReIngresar()
     {
-        bolillero.SacarBolilla();
-        bolillero.ReIngresar();
+        Bolillero.SacarBolilla();
+        Bolillero.ReIngresar();
 
-        Assert.Equal(10, bolillero.Bolillas.Count);
-        Assert.Empty(bolillero.BolillasSacadas);
+        Assert.Equal(10, Bolillero.Bolillas.Count);
+        Assert.Empty(Bolillero.BolillasSacadas);
     }
 
     [Fact]
     public void JugarGana()
     {
-        bool resultado = bolillero.Jugar([0, 1, 2, 3]);
+        bool resultado = Bolillero.Jugar([0, 1, 2, 3]);
         Assert.True(resultado);
     }
 
     [Fact]
     public void JugarPierde()
     {
-        bool perdiste = bolillero.Jugar([4, 2, 1]);
+        bool perdiste = Bolillero.Jugar([4, 2, 1]);
         Assert.False(perdiste);
     }
 
     [Fact]
     public void GanarNVeces()
     {
-        Equals(2, bolillero.JugarNVeces(2, [0, 1, 2]));
+        Equals(2, Bolillero.JugarNVeces(2, [0, 1, 2]));
     }
 }
