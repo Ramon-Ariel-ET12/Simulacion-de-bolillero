@@ -6,10 +6,10 @@ public class Test
     public Test() => Bolillero = new Bolillero(10, new Primero());
 
     [Fact]
-    public void Test1()
+    public async Task Test1()
     {
         Simulacion.SimularSinHilos(Bolillero, [0, 1, 2, 3], 8);
-        Simulacion.SimularConHilos(Bolillero, [0, 1, 2, 3], 10, 4);
+        await Simulacion.SimularConHilosAsync(Bolillero, [0, 1, 2, 3], 10, 4);
     }
 
     [Fact]
